@@ -1,7 +1,7 @@
 import timeit
 import random
 
-# Реалізація сортування злиттям (Mergesort)
+# Реалізація сортування злиттям (Merge Sort)
 def merge_sort(arr):
     if len(arr) > 1:
         mid = len(arr) // 2
@@ -32,7 +32,7 @@ def merge_sort(arr):
             j += 1
             k += 1
 
-# Реалізація сортування вставками (Insertionsort)
+# Реалізація сортування вставками (Insertion Sort)
 def insertion_sort(arr):
     for i in range(1, len(arr)):
         key = arr[i]
@@ -52,6 +52,8 @@ def compare_sorts():
         'Timsort': sorted
     }
 
+    results = []
+
     for size in data_sizes:
         print(f"Розмір даних: {size}")
         data = [random.randint(0, 10000) for _ in range(size)]
@@ -61,7 +63,28 @@ def compare_sorts():
             data_copy = data.copy()
             # Вимірювання часу виконання
             time = timeit.timeit(lambda: func(data_copy), number=1)
+            results.append((size, name, time))
             print(f"{name}: {time:.6f} секунд")
+    
+    return results
 
 if __name__ == "__main__":
-    compare_sorts()
+    results = compare_sorts()
+
+    with open("results.txt", "w", encoding="utf-8") as f:
+        for size, name, time in results:
+            f.write(f"Розмір даних: {size}, Алгоритм: {name}, Час: {time:.6f} секунд\n")
+
+    with open("README.md", "w", encoding="utf-8") as f:
+        f.write("# Порівняння алгоритмів сортування\n\n")
+        f.write("У цьому завданні ми порівняли три різних алгоритми сортування за часом виконання:\n")
+        f.write("Merge Sort, Insertion Sort та Timsort (вбудований алгоритм Python).\n\n")
+        f.write("## Результати\n\n")
+        f.write("| Розмір даних | Алгоритм | Час (секунди) |\n")
+        f.write("|--------------|----------|---------------|\n")
+        for size, name, time in results:
+            f.write(f"| {size} | {name} | {time:.6f} |\n")
+        f.write("\n## Висновки\n")
+        f.write("Алгоритм Timsort виявився найефективнішим на всіх наборах даних, що доводить його перевагу\n")
+        f.write("у поєднанні сортування злиттям та сортування вставками.\n")
+
